@@ -9,7 +9,7 @@ readme = "./Readme.md"
 description = "Lightweight framework for building ONNX runtime pipelines with ort"
 homepage = "https://github.com/fbilhaut/orp"
 repository = "https://github.com/fbilhaut/orp"
-documentation = "https://docs.rs/piport/orp"
+documentation = "https://docs.rs/fbilhaut/orp"
 
 [dependencies]
 ort = { version = "=2.0.0-rc.9" }
