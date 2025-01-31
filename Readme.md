@@ -2,7 +2,7 @@
 
 ## 💬 Introduction
 
-`orp` is a lightweight framework designed to simplify the creation and execution of **O**NNX **R**untime **P**ipelines in Rust. Built on top of the [🦀 `ort`](https://ort.pyke.io) runtime and the [`🔗 composable`](https://github.com/fbilhaut/composable) crate, it provides an simple way to handle data pre- and post-processing, chain multiple ONNX models together, while encouraging code reuse and clarity.
+`orp` is a lightweight framework designed to simplify the creation and execution of **O**NNX **R**untime **P**ipelines in Rust. Built on top of the [`🦀 ort`](https://ort.pyke.io) runtime and the [`🔗 composable`](https://github.com/fbilhaut/composable) crate, it provides an simple way to handle data pre- and post-processing, chain multiple ONNX models together, while encouraging code reuse and clarity.
 
 
 ## 🔨 Sample Use-Cases
