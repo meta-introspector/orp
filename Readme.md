@@ -7,8 +7,8 @@
 
 ## 🔨 Sample Use-Cases
 
-* [`gline-rs`](https://github.com/fbilhaut/gline-rs): an inference engine for GLiNER models
-* *more to come...*
+* [`🌿 gline-rs`](https://github.com/fbilhaut/gline-rs): inference engine for GLiNER models
+* [`🧲 gte-rs`](https://github.com/fbilhaut/gte-rs): text embedding and re-ranking
 
 ## ⚡️ GPU/NPU Inferences
 
