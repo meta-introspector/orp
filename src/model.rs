@@ -25,6 +25,18 @@ impl Model {
         })
     }
 
+    pub fn new_from_bytes(model_bytes: &[u8], params: RuntimeParameters) -> Result<Self> {
+        let session = Session::builder()?
+            .with_intra_threads(params.threads())?
+            .with_execution_providers(params.into_execution_providers())?
+            .with_optimization_level(GraphOptimizationLevel::Level3)?
+            .commit_from_memory(model_bytes)?;
+
+        Ok(Self {
+            session
+        })
+    }
+
     pub fn inference<'a, P: Pipeline<'a>>(&'a self, input: P::Input, pipeline: &P, params: &P::Parameters) -> Result<P::Output> {
         // pre-process
         let (input, context) = pipeline.pre_processor(params).apply(input)?;
