@@ -6,5 +6,6 @@
 pub mod params;
 pub mod model;
 pub mod pipeline;
+pub mod error;
 
 pub type Result<T> = core::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;

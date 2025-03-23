@@ -1,6 +1,9 @@
+use std::collections::HashSet;
 use std::path::Path;
 use composable::Composable;
 use ort::session::{Session, SessionInputs, SessionOutputs, builder::GraphOptimizationLevel};
+use crate::error::UnexpectedModelSchemaError;
+
 use super::Result;
 use super::params::RuntimeParameters;
 use super::pipeline::Pipeline;
@@ -37,7 +40,10 @@ impl Model {
         })
     }
 
+    /// Perform inferences using the provided pipeline and parameters
     pub fn inference<'a, P: Pipeline<'a>>(&'a self, input: P::Input, pipeline: &P, params: &P::Parameters) -> Result<P::Output> {
+        // check schema
+        self.check_schema(pipeline)?;
         // pre-process
         let (input, context) = pipeline.pre_processor(params).apply(input)?;
         // inference
@@ -52,11 +58,28 @@ impl Model {
         ComposableModel::new(self, pipeline, params)
     }
 
+    /// Check model schema wrt. pipeline expectations
+    fn check_schema<'a, P: Pipeline<'a>>(&'a self, pipeline: &P) -> Result<()> {
+        if let Some(expected_inputs) = pipeline.expected_inputs() {
+            // inputs should be exactly the same sets
+            let actual_inputs: HashSet<_> = self.session.inputs.iter().map(|i| i.name.as_str()).collect();
+            if !actual_inputs.eq(expected_inputs) {
+                return UnexpectedModelSchemaError::new("input", expected_inputs, &actual_inputs).into_err();
+            }
+        }
+        if let Some(expected_outputs) = pipeline.expected_outputs() {
+            // for outputs, we just check that the expected ones are present (but having others is ok)
+            let actual_outputs: HashSet<_> = self.session.outputs.iter().map(|i| i.name.as_str()).collect();
+            if !actual_outputs.is_superset(&expected_outputs) {
+                return UnexpectedModelSchemaError::new("output", expected_outputs, &actual_outputs).into_err();
+            }
+        }
+        Ok(())
+    }
 
     fn run(&self, input: SessionInputs<'_, '_>) -> Result<SessionOutputs<'_, '_>> {
         Ok(self.session.run(input)?)
     }
-
 
 }
 
