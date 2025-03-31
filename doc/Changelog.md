@@ -7,8 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [0.9.3] - UNRELEASED
 
+### Changed
+
 * `Pipeline::expected_inputs` and `Pipeline::expected_outputs` now take the parameters as arguments (in case the expected tensors depend on them) and return iterators for greater flexibility.
 
+### Fixed
+
+* Fixed error message in case of expected/actual tensors mismatch.
 
 ## [0.9.2] - 2025-03-23
 

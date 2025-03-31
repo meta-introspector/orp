@@ -8,9 +8,15 @@ pub struct UnexpectedModelSchemaError {
 }
 
 impl UnexpectedModelSchemaError {
-    pub fn new(kind: &str, expected: &HashSet<&str>, actual: &HashSet<&str>) -> Self {
+    pub fn new_for_input(pipeline: &HashSet<&str>, model: &HashSet<&str>) -> Self {
         Self {
-            message: format!("{} tensors mismatch: pipeline expects {:?} but model has {:?}", kind, actual, expected),
+            message: format!("input tensors mismatch: pipeline provides {pipeline:?} but model expects {model:?}"),
+        }
+    }
+
+    pub fn new_for_output(pipeline: &HashSet<&str>, model: &HashSet<&str>) -> Self {
+        Self {
+            message: format!("output tensors mismatch: pipeline expects {pipeline:?} but model provides {model:?}"),
         }
     }
 

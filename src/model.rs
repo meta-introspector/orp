@@ -65,7 +65,7 @@ impl Model {
             let expected_inputs = &expected_inputs.collect();
             let actual_inputs: HashSet<_> = self.session.inputs.iter().map(|i| i.name.as_str()).collect();
             if !actual_inputs.eq(expected_inputs) {
-                return UnexpectedModelSchemaError::new("input", expected_inputs, &actual_inputs).into_err();
+                return UnexpectedModelSchemaError::new_for_input(expected_inputs, &actual_inputs).into_err();
             }
         }
         if let Some(expected_outputs) = pipeline.expected_outputs(params) {            
@@ -73,7 +73,7 @@ impl Model {
             let expected_outputs = &expected_outputs.collect();
             let actual_outputs: HashSet<_> = self.session.outputs.iter().map(|i| i.name.as_str()).collect();
             if !actual_outputs.is_superset(&expected_outputs) {
-                return UnexpectedModelSchemaError::new("output", expected_outputs, &actual_outputs).into_err();
+                return UnexpectedModelSchemaError::new_for_output(expected_outputs, &actual_outputs).into_err();
             }
         }
         Ok(())
