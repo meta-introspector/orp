@@ -1,4 +1,3 @@
-use std::collections::HashSet;
 use ort::session::{SessionInputs, SessionOutputs};
 use composable::Composable;
 use super::model::Model;
@@ -22,14 +21,14 @@ pub trait Pipeline<'a> {
 
     /// Optionally, the pipeline can expose the (exact) set of input tensors that must be exposed by the model 
     /// In such case it will be checked before inferencing.
-    fn expected_inputs(&self) -> Option<&HashSet<&str>> {
-        None
+    fn expected_inputs(&self, _params: &Self::Parameters) -> Option<impl Iterator<Item = &str>> {
+        None::<std::iter::Empty<&str>>
     }
 
     /// Optionally, the pipeline can expose the (sub-)set of output tensors that must be exposed by the model
     /// In such case it will be checked before inferencing.
-    fn expected_outputs(&self) -> Option<&HashSet<&str>> {
-        None
+    fn expected_outputs(&self, _params: &Self::Parameters) -> Option<impl Iterator<Item = &str>> {
+        None::<std::iter::Empty<&str>>
     }
 }
 
