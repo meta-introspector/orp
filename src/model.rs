@@ -58,6 +58,23 @@ impl Model {
         ComposableModel::new(self, pipeline, params)
     }
 
+    /// Writes various model properties from metadata and input/output tensors
+    pub fn inspect<W: std::io::Write>(&self, mut writer: W) -> Result<()> {
+        let metadata = self.session.metadata()?;
+        writeln!(writer, "NAME: {}", metadata.name()?)?;
+        writeln!(writer, "PRODUCER: {}", metadata.producer()?)?;
+        writeln!(writer, "VERSION: {}", metadata.version()?)?;
+        writeln!(writer, "INPUTS:")?;
+        for input in &self.session.inputs {
+            writeln!(writer, "\t{}: {:?}", input.name, input.input_type)?;
+        }
+        writeln!(writer, "OUTPUTS:")?;
+        for input in &self.session.outputs {
+            writeln!(writer, "\t{}: {:?}", input.name, input.output_type)?;
+        }
+        Ok(())
+    }
+
     /// Check model schema wrt. pipeline expectations
     fn check_schema<'a, P: Pipeline<'a>>(&'a self, pipeline: &P, params: &P::Parameters) -> Result<()> {
         if let Some(expected_inputs) = pipeline.expected_inputs(params) {
